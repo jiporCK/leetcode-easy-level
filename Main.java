@@ -1,29 +1,34 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
 
     // Removes duplicates from a sorted array in-place and returns new length
-    public static  int removeDuplicates(int[] nums) {
-        int uniqueElement = 0;
+    public static int removeDuplicates(int[] nums) {
+        if (nums.length == 0) return 0;
+        int uniqueIndex = 0;
         for (int i = 1; i < nums.length; i++) {
-            if (nums[i] != nums[uniqueElement]) {
-                uniqueElement++;
-                nums[uniqueElement] = nums[i];
+            if (nums[i] != nums[uniqueIndex]) {
+                uniqueIndex++;
+                nums[uniqueIndex] = nums[i];
             }
         }
-        return uniqueElement + 1;
+        return uniqueIndex + 1;
     }
 
     // Removes all instances of a specific value in-place and returns new length
     public static int removeElement(int[] nums, int val) {
-        if  (nums.length == 0) return 0;
-        int k = 0;
+        int k = 0; // Number of elements not equal to val
+
         for (int i = 0; i < nums.length; i++) {
             if (nums[i] != val) {
-                nums[i] = nums[i+1];
+                nums[k] = nums[i];
                 k++;
-                i--;
             }
         }
+
         return k;
     }
 
@@ -98,7 +103,7 @@ public class Main {
     }
 
     // Merges nums2 into nums1 as one sorted array
-    public static  void merge(int[] nums1, int m, int[] nums2, int n) {
+    public static void merge(int[] nums1, int m, int[] nums2, int n) {
        // compare the last element of nums1 and nums2
        int midx = m -1;
        int nidx = n -1;
@@ -115,6 +120,173 @@ public class Main {
             right --;
         }
 
+    }
+
+    public static int singleNumber(int[] nums) {
+        // [4,1,2,1,2] => 4
+        if (nums.length == 1) return nums[0];
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i; j < nums.length - 1; j++) {
+                if (nums[j] != nums[j+1]) {
+                    return nums[j];
+                }
+            }
+        }
+        return -1;
+    }
+
+    public static int scoreOfString(String s) {
+        
+        int score = 0;
+        for (int i = 0; i < s.length() - 1; i++) {
+            score += Math.abs(s.charAt(i) - s.charAt(i+1));
+        }
+
+        return score;
+    }
+
+    public static int[] buildArray(int[] nums) {
+
+        int[] newArr = new int[nums.length];
+
+        for (int i = 0; i < nums.length; i++) {
+            newArr[i] = nums[nums[i]];
+        }
+
+        return newArr;
+
+    }
+
+    public int[] getConcatenation(int[] nums) {
+        int[] newArr = new int[nums.length + nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            newArr[i] = nums[i];
+            newArr[i + nums.length] = nums[i];
+        } 
+        return newArr;
+    }
+
+    public String defangIPaddr(String address) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < address.length() - 1; i++) {
+            if (address.charAt(i) == '.') {
+                sb.append("[.]");
+            } else {
+                sb.append(address.charAt(i));
+            }
+        }
+        return sb.toString();
+
+    }
+
+    public int[] transformArray(int[] nums) {
+        int[] newArr = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] % 2 == 0) {
+                newArr[i] = 0;
+            } else {
+                newArr[i] = 1;
+            }
+        }
+        for (int i = 0; i < newArr.length; i++) {
+            for (int j = 0; j < newArr.length - 1; j++) {
+                if (newArr[j] > newArr[j+1]) {
+                    int temp = newArr[j];
+                    newArr[j] = newArr[j+1];
+                    newArr[j+1] = temp;
+                }
+            }
+        }
+        return newArr;
+    }
+
+    public int[] shuffle(int[] nums, int n) {
+        // nums = [2,3,5,4,1,7], n = 3
+        // nums is of length 2n = 6
+        // First half: x = [2,3,5] (indices 0 to n-1)
+        // Second half: y = [4,1,7] (indices n to 2n-1)
+        // Output should interleave them: [2,4,3,1,5,7]
+
+        int[] result = new int[2 * n];
+        for (int i = 0; i < n; i++) {
+            result[2 * i] = nums[i];       // xi
+            result[2 * i + 1] = nums[i + n]; // yi
+        }
+        return result;
+    }
+
+    public int minimumOperations(int[] nums) {
+        // [1,2,3,4] (element that can substract by 3)
+        // cur % 3 == 0;
+        // cur % 3 != 0;
+        // => 
+        int count = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] % 3 != 0 ) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public List<Integer> findWordsContaining(String[] words, char x) {
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].indexOf(x) != -1) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+    public int finalValueAfterOperations(String[] operations) {
+        int result = 0;
+        for (String operation: operations) {
+            if (operation.contains("+")) {
+                result += 1; 
+            } else {
+                result -= 1;
+            }
+        }
+        return result;
+    }
+    
+    public static int differenceOfSums(int n, int m) {
+        int sumN = 0;
+        int sumM = 0;
+        for (int i = 1; i <= n; i++) {
+            if (i % m == 0) {
+                sumM += i;
+            } else {
+                sumN += i;
+            }
+        } 
+        System.out.println("sum of n: " + sumN);
+        System.out.println("sum of m: " + sumM);
+
+        return sumN - sumM;
+    }
+
+    public int[] getSneakyNumbers(int[] nums) {
+        Map<Integer, Integer> freq = new HashMap<>();
+
+        // Count frequency of each number
+        for (int num : nums) {
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        }
+
+        // Collect numbers that appear exactly once
+        List<Integer> result = new ArrayList<>();
+        for (int num : nums) {
+            if (freq.get(num) == 1) {
+                result.add(num);
+            }
+        }
+
+        // Convert List<Integer> to int[]
+        return result.stream().mapToInt(i -> i).toArray();
     }
 
     
@@ -167,6 +339,15 @@ public class Main {
             System.out.print(num + " ");
         }
         System.out.println();
+
+        int[] nums = {4,1,2,1,2};
+        System.out.println(singleNumber(nums));
+
+        String s = "hello";
+        System.out.println(scoreOfString(s));
+
+        differenceOfSums(10, 3);
+
     }
 
 }

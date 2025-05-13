@@ -1,27 +1,32 @@
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.HashSet;
+import java.util.Set;
+import jdk.jfr.Enabled;
+
 
 public class Medium {
+    
     public static int lengthOfLongestSubstring(String s) {
-        Map<Character, Integer> lastSeen = new HashMap<>();
+        int n = s.length();
         int maxLength = 0;
         int left = 0;
+        Set<Character> charSet = new HashSet<>();
 
-        for (int right = 0; right < s.length(); right++) {
-            char c = s.charAt(right);
-
-            // If the character was seen and is within the current window
-            if (lastSeen.containsKey(c) && lastSeen.get(c) >= left) {
-                left = lastSeen.get(c) + 1;  // Move left pointer just past the last seen index
+        for (int right = 0; right < n; right++) {
+            if (!charSet.contains(s.charAt(right))) {
+                charSet.add(s.charAt(right));
+                maxLength = Math.max(maxLength, right - left + 1);
+            } else {
+                while (charSet.contains(s.charAt(right))) {
+                    charSet.remove(s.charAt(left));
+                    left++;
+                }
+                charSet.add(s.charAt(right));
             }
-
-            lastSeen.put(c, right);  // Update the last seen index of the character
-            maxLength = Math.max(maxLength, right - left + 1);
         }
 
         return maxLength;
     }
-
 
     public static void main(String[] args) {
         String s = "abcabcbb";
